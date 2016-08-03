@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Work-Break Timer</title>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+      div {
+        color: #1B232F;
+        font-family: Verdana, Arial, sans-serif;
+        font-size: 18px;
+        font-weight: bold;
+        text-decoration: none;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="message">Take a break in: </div>
+    <div id="countdown"></div>
+    <script>
+        var work = true;
+        function countdown( messageElement, countdownElement, minutes, seconds )
+        {
+            var msg, cntdwn, endTime, hours, mins, msLeft, time;
+            function twoDigits( n )
+            {
+                return (n <= 9 ? "0" + n : n);
+            }
+            function updateTimer()
+            {
+                msLeft = endTime - (+new Date);
+                if ( msLeft < 1000 ) {
+                    next();
+                } else {
+                    time = new Date( msLeft );
+                    hours = time.getUTCHours();
+                    mins = time.getUTCMinutes();
+                    cntdwn.innerHTML = (hours ? hours + ':' + twoDigits( mins ) : mins) + ':' + twoDigits( time.getUTCSeconds() );
+                    setTimeout( updateTimer, time.getUTCMilliseconds() + 500 );
+                }
+            }
+            cntdwn = document.getElementById( countdownElement );
+            msg = document.getElementById( messageElement );
+            endTime = (+new Date) + 1000 * (60*minutes + seconds) + 500;
+            updateTimer();
+            function next () {
+                if (work) {
+                    msg.innerHTML = "go back to work in: ";
+                    work = false;
+                    countdown( "message", "countdown", 17, 0 );
+                } else {
+                    msg.innerHTML = "Take a break in: ";
+                    work =  true;
+                    countdown( "message", "countdown", 52, 0 );
+                }
+            }
+        }
+        countdown( "message", "countdown", 52, 0 );
+    </script>
+  </body>
+</html>
